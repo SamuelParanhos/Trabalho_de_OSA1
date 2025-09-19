@@ -1,9 +1,11 @@
 #include "Registro.hpp"
 
-std::string Registro::GetNome(){
+std::string Registro::GetNome()
+{
     return nome;
 }
 
-int Registro::GetIdade(){
+int Registro::GetIdade()
+{
     return idade;
 }

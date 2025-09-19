@@ -1,34 +1,24 @@
-##############################################################################
-# Exemplo de makefile para um projeto em linguagem C++...
-# Para simplificar, todos os arquivos estão em um mesmo diretório
-##############################################################################
-# Arquivo principal: main.cpp
-##############################################################################
-#                       Arquivos auxiliares do projeto
-##############################################################################
-# Registro.cpp: depende de Buffer.h 
-# Buffer.cpp: depende de Buffer.h Registro.h e Arquivo.h 
-# Arquivo.cpp: depende de Buffer.h Arquivo.h e Registro.h 
-##############################################################################
+# Arquivo principal 
+MAIN := main
 
-# definindo as variáveis do projeto (MAIN é o nome do arquivo principal, que contem a função main, sem a extensao)
-MAIN 	:= main
-# objetos a serem gerados na compilação
-OBJECTS := $(MAIN).o Registro.o Buffer.o Arquivo.o
-# (para C, pode-se usar o padrão ISO 2011 (c11) ou 2018 (c18), dependendo do seu compilador...
-# usar -std=c98 no lugar do c++11, c++17, c++20, etc.. 
+# Pastas
+INCLUDES := includes
+SRC := src
 
-FLAGS 	:= -Wall -Wextra -std=c++17 -pedantic-errors
+# Objetos a compilar
+OBJECTS := $(MAIN).o $(SRC)/Registro.o $(SRC)/Buffer.o $(SRC)/Arquivo.o
 
+# Flags do compilador
+FLAGS := -Wall -Wextra -std=c++17 -pedantic-errors -I$(INCLUDES)
 
-# habilitar a depuração
-DEBUG :=  -g
+# Debug
+DEBUG := -g
 
-# necessário apenas quando se incluir  a biblioteca <math.h> em algum arquivo fonte no projeto
-MATH 	:= -lm
+# Bibliotecas extras
+MATH := -lm
 
-# definição do compilador: para C usar o gcc, por exemplo
-CC		:= g++
+# Compilador
+CC := g++
 
 # ajustando alguns parâmetros/comandos ao sistema operacional
 ifeq ($(OS), Windows_NT)
@@ -37,35 +27,34 @@ else
 OUTPUTMAIN := $(MAIN).out
 endif
 
-# ponto de compilação principal
-all: main.exe
+# Alvo principal
+all: $(OUTPUTMAIN)
 	@echo Compiling 'all' complete!
 
-# gerando o arquivo executavel
-main.exe: $(OBJECTS)  
+# Linkagem final
+$(OUTPUTMAIN): $(OBJECTS)
 	$(CC) $(FLAGS) $(OBJECTS) -o $(OUTPUTMAIN) $(MATH)
-	
-# gerando o arquivo objeto da função principal... 
-main.o: $(MAIN).cpp Arquivo.h Registro.h Buffer.h
-	$(CC) $(FLAGS) -c $(MAIN).cpp
-	
-# gerando o arquivo objeto Registro.o
-Registro.o: Registro.cpp Registro.h
-	$(CC) $(FLAGS) -c Registro.cpp
 
-# gerando o arquivo objeto Buffer.o
-Buffer.o: Buffer.cpp Buffer.h Registro.h Arquivo.h
-	$(CC) $(FLAGS) -c Buffer.cpp
+# Regras de compilação dos objetos
+$(MAIN).o: $(MAIN).cpp $(INCLUDES)/Arquivo.hpp $(INCLUDES)/Registro.hpp $(INCLUDES)/Buffer.hpp
+	$(CC) $(FLAGS) -c $(MAIN).cpp -o $(MAIN).o
 
-# gerando o arquivo objeto Arquivo.o
-Arquivo.o: Arquivo.cpp Arquivo.h Registro.h Buffer.h
-	$(CC) $(FLAGS) -c Arquivo.cpp
+$(SRC)/Registro.o: $(SRC)/Registro.cpp $(INCLUDES)/Registro.hpp
+	$(CC) $(FLAGS) -c $(SRC)/Registro.cpp -o $(SRC)/Registro.o
 
+$(SRC)/Buffer.o: $(SRC)/Buffer.cpp $(INCLUDES)/Buffer.hpp $(INCLUDES)/Registro.hpp $(INCLUDES)/Arquivo.hpp
+	$(CC) $(FLAGS) -c $(SRC)/Buffer.cpp -o $(SRC)/Buffer.o
+
+$(SRC)/Arquivo.o: $(SRC)/Arquivo.cpp $(INCLUDES)/Arquivo.hpp $(INCLUDES)/Registro.hpp $(INCLUDES)/Buffer.hpp
+	$(CC) $(FLAGS) -c $(SRC)/Arquivo.cpp -o $(SRC)/Arquivo.o
+
+# Limpeza
 clean:
 	rm -rf $(OBJECTS)
 	rm -rf $(OUTPUTMAIN)
 	@echo Cleanup complete!!!
 
+# Executar
 run: all
 	./$(OUTPUTMAIN)
 	@echo Executing 'all' complete!!!
