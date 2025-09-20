@@ -3,20 +3,18 @@
 
 #include <string>
 
+using namespace std;
+
 class Registro
 {
-private:
-    std::string nome;
+public:
+    string nome;
     int idade;
 
 public:
     Registro() = default;
-    std::string GetNome();
-    int GetIdade();
-    std::string packWithLength();
-    void unpackWithLength(std::string data);
-    std::string packFixed();
-    void unpackFixed(std::string buffer);
+    string packFixed();
+    void unpackFixed(string buffer);
 };
 
 #endif

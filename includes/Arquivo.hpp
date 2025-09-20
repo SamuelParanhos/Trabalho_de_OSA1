@@ -4,17 +4,20 @@
 #include <vector>
 #include "Registro.hpp"
 
+using namespace std;
+
 class Arquivo
 {
-private:
-    std::string nomeDoArquivo;
+public:
+    string nomeDoArquivo;
 
 public:
     Arquivo() = default;
-    void SetNomeDoArquivo(std::string nome);
-    std::vector<Registro> lerRegistrosCSV();
-    void adicionarRegistroFixo(Registro reg);
-    std::vector<Registro> lerRegistrosFixo();
+
+    vector<Registro> lerRegistrosCSV();
+    void adicionarRegistroFixo(const vector<Registro>& reg);
+    vector<Registro> lerRegistroFixo();
+    void display(vector<Registro>& reg);
 };
 
 #endif

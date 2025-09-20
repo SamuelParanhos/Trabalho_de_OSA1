@@ -1,11 +1,13 @@
 #include "Registro.hpp"
-
-std::string Registro::GetNome()
+#include "fstream"
+#include "sstream"
+  
+string Registro::packFixed()
 {
-    return nome;
+
+   
 }
-
-int Registro::GetIdade()
+void Registro::unpackFixed(string buffer)
 {
-    return idade;
+    //pegar a string em binário, converte ela para modo de usuário 
 }

@@ -4,12 +4,17 @@
 #include <fstream>
 #include "Registro.hpp"
 
+using namespace std;
+
 class Buffer
 {
 public:
     Buffer() = default;
-    void escreverRegistro(Registro reg, std::ofstream out);
-    Registro lerRefistroFixo(std::ifstream in);
+    void escreverRegistro(Registro &reg, ofstream& out);
+    Registro lerRegistroFixo(ifstream& in);
+    void escreverRegistroFixo(Registro reg, ofstream& out);
+    Registro lerRegistro(ifstream& in);
+
 };
 
 #endif
