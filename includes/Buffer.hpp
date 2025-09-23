@@ -11,9 +11,9 @@ class Buffer
 public:
     Buffer() = default;
     void escreverRegistro(Registro &reg, ofstream& out);
-    Registro lerRegistroFixo(ifstream& in);
+    Registro lerRegistroFixo(char* buffer_leitura);
     void escreverRegistroFixo(Registro reg, ofstream& out);
-    Registro lerRegistro(ifstream& in);
+    Registro lerRegistro(string linha);
 
 };
 
