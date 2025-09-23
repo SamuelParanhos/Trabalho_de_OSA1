@@ -1,5 +1,5 @@
-#include "Registro.hpp"
-#include "Arquivo.hpp"
+#include "includes/Registro.hpp"
+#include "includes/Arquivo.hpp"
 
 #include <iostream>
 
