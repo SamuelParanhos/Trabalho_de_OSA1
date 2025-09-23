@@ -13,15 +13,14 @@ string Registro::packFixed()
 
     return binario;
 }
-void Registro::unpackFixed(string buffer)
+void Registro::unpackFixed(char *buffer)
 {
     char nome_char[campoRegistro + 1];
-    strncpy(nome_char, buffer.c_str(), campoRegistro);
-    
-    for(int i = 0; i < 50; i++)
-    {
-        nome += nome_char[i];
-    }
 
-    memcpy(&idade, buffer.data() + campoNome, sizeof(int));
+    memcpy(nome_char, buffer, campoRegistro);
+    nome_char[campoRegistro] = '\0';
+
+    nome = std::string(nome_char);
+
+    memcpy(&idade, buffer + campoNome, sizeof(int));
 }

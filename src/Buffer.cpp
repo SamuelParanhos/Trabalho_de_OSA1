@@ -7,8 +7,7 @@ Registro Buffer::lerRegistro(ifstream &in)
     Registro registro;
     string linha;
 
-    // Esta é a segunda leitura que causa o salto no CSV
-    getline(in, linha);
+        getline(in, linha);
     stringstream ss(linha);
     string nome_str, idade_str;
 
@@ -34,6 +33,7 @@ Registro Buffer::lerRegistroFixo(ifstream &in)
 
     return registro;
 }
+
 void Buffer::escreverRegistroFixo(Registro reg, ofstream &out)
 {
     string binario = reg.packFixed();

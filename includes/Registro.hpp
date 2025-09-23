@@ -17,7 +17,7 @@ public:
 public:
     Registro() = default;
     string packFixed();
-    void unpackFixed(string buffer);
+    void unpackFixed(char *buffer);
 };
 
 #endif

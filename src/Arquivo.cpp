@@ -6,15 +6,15 @@
 
 vector<Registro> Arquivo::lerRegistrosCSV()
 {
+
     ifstream newFile(nomeDoArquivo);
     Buffer buffer;
     Registro reg;
     string linha;
     vector<Registro> registros;
 
-    getline(newFile, linha); // Lê o cabeçalho
+    getline(newFile, linha);
 
-    // Este loop lê uma linha, mas a função chamada dentro dele lê OUTRA
     while (getline(newFile, linha))
     {
         reg = buffer.lerRegistro(newFile);
