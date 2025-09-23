@@ -14,4 +14,6 @@ int main()
     arquivo.adicionarRegistroFixo(pimba);
     pimba = arquivo.lerRegistroFixo();
     return 0;
+    //oi
+    int a;
 }
