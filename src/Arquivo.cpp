@@ -3,6 +3,7 @@
 #include "Registro.hpp"
 #include <iostream>
 #include <cstring>
+#include <filesystem>
 
 vector<Registro> Arquivo::lerRegistrosCSV()
 {
@@ -30,8 +31,9 @@ vector<Registro> Arquivo::lerRegistrosCSV()
 
 void Arquivo::adicionarRegistroFixo(const vector<Registro> &reg)
 {
-    //Cria um novo arquino
-    ofstream out("ArquivoBinario", ios::binary);
+    filesystem::path nomeBIN = filesystem::path(nomeDoArquivo).replace_extension(".bin");
+    string caminhoBinario = nomeBIN.string();
+    ofstream out(nomeBIN, ios::binary);
     Buffer buffer;
 
     //Pega todos os registros coloca em uma variável temporária e escreve em um

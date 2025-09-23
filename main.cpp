@@ -1,7 +1,7 @@
 #include "includes/Registro.hpp"
 #include "includes/Arquivo.hpp"
-#include <filesystem>
 #include <iostream>
+#include <filesystem>
 
 int main()
 {
@@ -40,6 +40,7 @@ int main()
     }
 
     cout << "[" << count << "]" << "Todas as opcoes" << endl;
+
 
     // Menu de seleção: permite ao usuário escolher um arquivo ou sair
     while (true)
