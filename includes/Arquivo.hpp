@@ -17,7 +17,7 @@ public:
     vector<Registro> lerRegistrosCSV();
     void adicionarRegistroFixo(const vector<Registro>& reg);
     vector<Registro> lerRegistroFixo();
-    void display(vector<Registro>& reg);
+    void display(Registro reg);
 };
 
 #endif

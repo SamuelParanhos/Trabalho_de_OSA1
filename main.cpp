@@ -1,11 +1,17 @@
 #include "Registro.hpp"
-#include "Buffer.hpp"
 #include "Arquivo.hpp"
 
 #include <iostream>
 
 int main()
 {
-    std::cout << "Teste" << std::endl;
+    Arquivo arquivo;
+    Registro registro;
+    vector<Registro> pimba;
+
+    arquivo.nomeDoArquivo = "Arquivos_Nomes e Idades/Nomes_Idades_1.csv";
+    pimba = arquivo.lerRegistrosCSV();
+    arquivo.adicionarRegistroFixo(pimba);
+    pimba = arquivo.lerRegistroFixo();
     return 0;
 }

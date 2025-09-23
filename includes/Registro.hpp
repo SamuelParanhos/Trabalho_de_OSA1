@@ -11,6 +11,9 @@ public:
     string nome;
     int idade;
 
+    static const int campoNome = 50;
+    static const int campoRegistro = campoNome + sizeof(int);
+
 public:
     Registro() = default;
     string packFixed();

@@ -1,8 +1,7 @@
 #include "Arquivo.hpp"
 #include "Buffer.hpp"
 #include "Registro.hpp"
-#include <fstream>
-#include <sstream>
+#include <iostream>
 #include <cstring>
 
 vector<Registro> Arquivo::lerRegistrosCSV()
@@ -17,7 +16,7 @@ vector<Registro> Arquivo::lerRegistrosCSV()
 
     while (!newFile.eof())
     {
-        reg = buffer.lerRegistroFixo(newFile);
+        reg = buffer.lerRegistro(newFile);
         registros.push_back(reg);
     }
 
@@ -28,11 +27,11 @@ vector<Registro> Arquivo::lerRegistrosCSV()
 
 void Arquivo::adicionarRegistroFixo(const vector<Registro>& reg)
 {
-    ofstream out(nomeDoArquivo, ios::binary);
+    ofstream out("ArquivoBinario", ios::binary);
     Buffer buffer;
     
     
-    for(const auto registro : reg)
+    for(const Registro &registro : reg)
     {
         buffer.escreverRegistroFixo(registro, out);
         
@@ -42,10 +41,26 @@ void Arquivo::adicionarRegistroFixo(const vector<Registro>& reg)
 }
 vector<Registro> Arquivo::lerRegistroFixo()
 {
+    ifstream arquivoBinario("ArquivoBinario");
+    Buffer buffer;
+    Registro reg;
+    string linha;
+    vector<Registro> registros;
 
+    while (arquivoBinario.peek() != EOF)
+    {
+        reg = buffer.lerRegistroFixo(arquivoBinario);
+        registros.push_back(reg);
+        cout<<"Chegou aqui"<<endl;
+        display(reg);
+    }
+
+    arquivoBinario.close();
+
+    return registros;
 }
 
-void display(vector<Registro>& reg)
+void Arquivo::display(Registro reg)
 {
-
+    cout << reg.nome << "," << reg.idade <<endl;
 }
