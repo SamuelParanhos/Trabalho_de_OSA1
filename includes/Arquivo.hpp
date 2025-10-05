@@ -25,7 +25,7 @@ public:
         ifstream newFile(nomeDoArquivo);
         RegistroAluno registroAluno;
 
-                Buffer buffer;
+        Buffer buffer;
         Registro reg;
         string linha;
         vector<Registro> registros;
