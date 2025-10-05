@@ -1,20 +1,27 @@
 #ifndef BUFFER_HPP
 #define BUFFER_HPP
-
-#include <fstream>
-#include "Registro.hpp"
+#include <vector>
 
 using namespace std;
 
 class Buffer
 {
 public:
-    Buffer() = default;
-    void escreverRegistro(Registro &reg, ofstream& out);
-    Registro lerRegistroFixo(char* buffer_leitura);
-    void escreverRegistroFixo(Registro reg, ofstream& out);
-    Registro lerRegistro(string linha);
+    vector<char> data;
+    int ponteiro;
 
+public:
+    ~Buffer() = default;
+    void packFixo(string str, int tamanho);
+    string unpackFixo(int tamanho);
+    void packDelimitado(string str, char delimitador);
+    string unpackDelimitado(char delimitador);
+    void packComprimento(string str);
+    string unpackComprimento();
+    int pack(int valor);
+    bool read(istream strem, int tamanho);
+    void write(ostream stream);
+    void clear();
 };
 
 #endif

@@ -1,23 +1,22 @@
 #ifndef REGISTRO_HPP
 #define REGISTRO_HPP
+#include "Buffer.hpp"
 
-#include <string>
-
-using namespace std;
+enum Formato
+{
+    FIXO,
+    DELIMITADO,
+    COMPRIMEMTO
+};
 
 class Registro
 {
 public:
-    string nome;
-    int idade;
-
-    static const int campoNome = 50;
-    static const int campoRegistro = campoNome + sizeof(int);
-
-public:
-    Registro() = default;
-    string packFixed();
-    void unpackFixed(char *buffer);
+    virtual ~Registro() = default;
+    virtual void pack(Buffer buffer, Formato formato);
+    virtual void unpack(Buffer buffer, Formato formato);
+    virtual string getChave();
+    virtual int getTamanhoFixo();
 };
 
 #endif

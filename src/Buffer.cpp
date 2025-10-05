@@ -2,36 +2,67 @@
 #include <iostream>
 #include <sstream>
 
-Registro Buffer::lerRegistro(string linha)
+void packFixo(string str, int tamanho)
+{
+}
+string unpackFixo(int tamanho)
+{
+}
+void packDelimitado(string str, char delimitador)
+{
+}
+string unpackDelimitado(char delimitador)
+{
+}
+void packComprimento(string str)
+{
+}
+string unpackComprimento()
+{
+}
+int pack(int valor)
+{
+}
+bool read(istream strem, int tamanho)
+{
+}
+void write(ostream stream)
+{
+}
+void clear()
+{
+}
+
+/* Registro Buffer::lerRegistro(string linha)
 {
     Registro registro;
-    //Variável usada para manipular uma linha.
+    // Variável usada para manipular uma linha.
     stringstream ss(linha);
     string nome_str, idade_str;
 
-    //Separa a linha CSV nos campos nome e idade.
+    // Separa a linha CSV nos campos nome e idade.
     getline(ss, nome_str, ',');
     getline(ss, idade_str, '\n');
 
-    //atribui o nome a seu respectivo campo no registro.
+    // atribui o nome a seu respectivo campo no registro.
     registro.nome = nome_str;
 
-    //Verifica se o nome está vazio.
+    // Verifica se o nome está vazio.
     if (!idade_str.empty())
     {
-        //atribui a idade ao seu respectivo campo no registro,
-        //fazendo a conversão de char para int.
+        // atribui a idade ao seu respectivo campo no registro,
+        // fazendo a conversão de char para int.
         registro.idade = stoi(idade_str);
     }
 
     return registro;
 }
-Registro Buffer::lerRegistroFixo(char* buffer_leitura)
+Registro Buffer::lerRegistroFixo(char *buffer_leitura)
 {
     Registro registro;
-    
-    //Recebe um registro em formato binario e chama a função desserealizar 
-    //para converter os campos em seus respectivos formatos aceitos pela classe Registro.
+
+    // Recebe um registro em formato binario e chama a função desserealizar
+    // para converter os campos em seus respectivos formatos aceitos pela classe Registro.
     registro.unpackFixed(buffer_leitura);
 
     return registro;
@@ -39,10 +70,10 @@ Registro Buffer::lerRegistroFixo(char* buffer_leitura)
 
 void Buffer::escreverRegistroFixo(Registro reg, ofstream &out)
 {
-    //A string binário recebe o retorno da função de serealizar, que retorna uma única string
-    //contendo os campos nome e idade em formato binario.
+    // A string binário recebe o retorno da função de serealizar, que retorna uma única string
+    // contendo os campos nome e idade em formato binario.
     string binario = reg.packFixed();
 
-    //A string é salva no arquivo.
+    // A string é salva no arquivo.
     out.write(binario.c_str(), binario.length());
-}
+}*/
