@@ -4,6 +4,19 @@
 
 void packFixo(string str, int tamanho)
 {
+
+  /*// Cria uma string para armazenar os campos nome e idade
+  // em formato binário.
+  string binario(campoRegistro, '\0');
+
+  // Coloca o nome na string em formato binário.
+  strncpy(&binario[0], nome.c_str(), campoNome);
+
+  // Coloca a idade na string em formato binário.
+  memcpy(&binario[0] + campoNome, &idade, sizeof(int));
+
+  return binario;
+   */
 }
 string unpackFixo(int tamanho)
 {
@@ -33,7 +46,7 @@ void clear()
 {
 }
 
-/* Registro Buffer::lerRegistro(string linha)
+ /*Registro Buffer::lerRegistro(string linha)
 {
     Registro registro;
     // Variável usada para manipular uma linha.
@@ -57,6 +70,7 @@ void clear()
 
     return registro;
 }
+
 Registro Buffer::lerRegistroFixo(char *buffer_leitura)
 {
     Registro registro;

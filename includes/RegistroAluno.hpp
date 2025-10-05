@@ -1,6 +1,5 @@
 #ifndef REGISTRO_ALUNO.HPP
 #include "Registro.hpp"
-#include "Buffer.hpp"
 
 class RegistroAluno : public Registro
 {
@@ -11,10 +10,11 @@ public:
 
 public:
     ~RegistroAluno() = default;
-    void pack(Buffer buffer, Formato formato);
-    void unpack(Buffer buffer, Formato formato);
-    string getChave();
-    int getTamanhoFixo();
+    void pack(string linha, Formato formato);
+    void unpack(string linha, Formato formato);
+    Registro lerRegistro(string linha);
+    string const getChave();
+    int const getTamanhoFixo();
 };
 
 #endif

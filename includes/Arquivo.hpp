@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Registro.hpp"
+#include <sstream>
 
 using namespace std;
 template <typename T>
@@ -19,30 +20,38 @@ public:
         this.formato = formato;
     };
 
+    vector<T> lerRegistroCSV()
+    {
+        ifstream newFile(nomeDoArquivo);
+        string nome_str, matricula_str, curso_str;
+        vector<T> reg;
+
+        getline(newFile, linha);
+
+        while (getline(newFile, linha))
+        {
+            T registro;
+            registro.lerRegistro(linha);
+            reg.push_back(registro);
+        }
+        return reg;
+    }
     vector<T> lerRegistros()
     {
         // Cria um novo arquivo e variáveis para auxiliar na exucação da função.
         ifstream newFile(nomeDoArquivo);
-        RegistroAluno registroAluno;
+        string nome_str, matricula_str, curso_str;
+        vector<T> reg;
 
-        Buffer buffer;
-        Registro reg;
-        string linha;
-        vector<Registro> registros;
-
-        // Usa o getline para pular o cabeçalho da função.
         getline(newFile, linha);
 
-        // Comando de repetição usada para ler todas as linhas do arquivo CSV.
         while (getline(newFile, linha))
         {
-            reg = buffer.lerRegistro(linha);
-            registros.push_back(reg);
+            T registro;
+            registro.lerRegistro(linha);
+            reg.push_back(registro);
         }
-
-        // Fecha o arquivo e retorna o vetor de Registro.
-        newFile.close();
-        return registros;
+        return reg;
     }
 
     void Arquivo::adicionarRegistroFixo(const vector<Registro> &reg)

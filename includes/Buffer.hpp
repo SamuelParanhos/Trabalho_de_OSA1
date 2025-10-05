@@ -19,8 +19,8 @@ public:
     void packComprimento(string str);
     string unpackComprimento();
     int pack(int valor);
-    bool read(istream strem, int tamanho);
-    void write(ostream stream);
+    bool read(istream &stream, int tamanho);
+    void write(ostream &stream);
     void clear();
 };
 
