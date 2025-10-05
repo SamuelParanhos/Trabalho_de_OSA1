@@ -21,9 +21,9 @@ Registro RegistroAluno::lerRegistro(string linha)
 }
 void RegistroAluno::pack(string linha, Formato formato)
 {
+  Buffer buffer;
   int tamanho = 50;
   char delimitador = '&';
-  Buffer buffer;
 
   switch (formato)
   {
@@ -41,21 +41,24 @@ void RegistroAluno::pack(string linha, Formato formato)
     break;
   }
 }
-void RegistroAluno::unpack(Buffer buffer, Formato formato)
+void RegistroAluno::unpack(string linha, Formato formato)
 {
-  /*// Cria uma variável auxiliar para receber o nome.
-  char nome_char[campoRegistro + 1];
+  Buffer buffer;
+  int tamanho = 50;
+  char delimitador = '&';
+  switch (formato)
+  {
 
-  // O nome em formato binário é colocado na variável auxiliar
-  // e convertido para o tipo char*.
-  memcpy(nome_char, buffer, campoRegistro);
+  case 1:
+    buffer.unpackFixo(tamanho);
+    break;
 
-  nome_char[campoRegistro] = '\0';
+  case 2:
+    buffer.packDelimitado(linha, delimitador);
+    break;
 
-  // O nome é convertido para string e armazenado no campo nome do Registro.
-  nome = std::string(nome_char);
-
-  // O nome em formato binário é colocado no campo idade de Registro.
-  memcpy(&idade, buffer + campoNome, sizeof(int));
-*/
+  case 3:
+    buffer.unpackComprimento();
+    break;
+  }
 }

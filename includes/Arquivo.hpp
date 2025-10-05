@@ -23,7 +23,6 @@ public:
     vector<T> lerRegistroCSV()
     {
         ifstream newFile(nomeDoArquivo);
-        string nome_str, matricula_str, curso_str;
         vector<T> reg;
 
         getline(newFile, linha);
@@ -39,8 +38,7 @@ public:
     vector<T> lerRegistros()
     {
         // Cria um novo arquivo e variáveis para auxiliar na exucação da função.
-        ifstream newFile(nomeDoArquivo);
-        string nome_str, matricula_str, curso_str;
+        ifstream newFile(nomeDoArquivo,ios::bin);
         vector<T> reg;
 
         getline(newFile, linha);
@@ -48,7 +46,7 @@ public:
         while (getline(newFile, linha))
         {
             T registro;
-            registro.lerRegistro(linha);
+            registro.unpacked(linha, formato);
             reg.push_back(registro);
         }
         return reg;

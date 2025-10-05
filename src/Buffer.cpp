@@ -20,6 +20,21 @@ void packFixo(string str, int tamanho)
 }
 string unpackFixo(int tamanho)
 {
+      /*// Cria uma variável auxiliar para receber o nome.
+  char nome_char[campoRegistro + 1];
+
+  // O nome em formato binário é colocado na variável auxiliar
+  // e convertido para o tipo char*.
+  memcpy(nome_char, buffer, campoRegistro);
+
+  nome_char[campoRegistro] = '\0';
+
+  // O nome é convertido para string e armazenado no campo nome do Registro.
+  nome = std::string(nome_char);
+
+  // O nome em formato binário é colocado no campo idade de Registro.
+  memcpy(&idade, buffer + campoNome, sizeof(int));
+*/
 }
 void packDelimitado(string str, char delimitador)
 {
