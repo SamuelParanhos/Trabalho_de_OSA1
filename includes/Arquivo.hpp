@@ -39,7 +39,7 @@ public:
     vector<T> lerRegistros()
     {
         // Cria um novo arquivo e variáveis para auxiliar na exucação da função.
-        ifstream newFile(nomeDoArquivo,ios::bin);
+        ifstream newFile(nomeDoArquivo, ios::bin);
         vector<T> reg;
 
         getline(newFile, linha);
@@ -65,7 +65,7 @@ public:
         // arquivo binário.
         for (const T &registro : reg)
         {
-            binario = registro.pack(formato);
+            binario = registro.pack(buffer, formato);
             out.write(binario.c_str(), binario.size());
         }
 

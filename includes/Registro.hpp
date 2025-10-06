@@ -15,7 +15,7 @@ class Registro
 {
 public:
     virtual ~Registro() = default;
-    virtual string pack(Formato formato)const;
+    virtual void pack(Buffer &buffer, Formato formato) const;
     virtual void unpack(Buffer buffer, Formato formato);
     virtual Registro lerRegistro(string linha);
     virtual string const getChave();

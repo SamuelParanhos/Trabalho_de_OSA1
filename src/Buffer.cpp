@@ -2,14 +2,15 @@
 #include <iostream>
 #include <sstream>
 
-void Buffer::packFixo(string &binario, string &str, int tamanho)
+void Buffer::packFixo(const string &str, int tamanho)
 {
-   str.resize(tamanho, ' ');
-   binario += str;
+   string temp = str;
+   temp.resize(tamanho, ' ');
+   data.insert(data.end(), str.begin(), str.end());
 }
 string Buffer::unpackFixo(string str, int tamanho)
 {
-     
+
    /*// Cria uma variável auxiliar para receber o nome.
    char nome_char[campoRegistro + 1];
 
@@ -26,36 +27,35 @@ string Buffer::unpackFixo(string str, int tamanho)
  memcpy(&idade, buffer + campoNome, sizeof(int));
  */
 }
-void Buffer::packDelimitado(string &binario, string &str,char delimitador)
+void Buffer::packDelimitado(const string &str, char delimitador)
 {
-   binario += str + delimitador;
+   data.insert(data.end(), str.begin(), str.end());
+   data.push_back(delimitador);
 }
-string Buffer::unpackDelimitado(string str,char delimitador)
+string Buffer::unpackDelimitado(string str, char delimitador)
 {
 }
-void Buffer::packComprimento(string &binario, string &str)
+void Buffer::packComprimento(const string &str)
 {
    short tamanho = str.length();
-   binario.append(reinterpret_cast<const char*>(&tamanho), sizeof (int));
-   binario.append(str.data(),tamanho);
+   binario.append(reinterpret_cast<const char *>(&tamanho), sizeof(int));
+   binario.append(str.data(), tamanho);
 
-    // 1. Pega o tamanho da string
-   
+   // 1. Pega o tamanho da string
 
-    // 2. Escreve os bytes da variável 'tamanho' no buffer
-    //    'memcpy' copia sizeof(short) bytes (geralmente 2)
-    //    da origem (&tamanho) para o destino (final do nosso vetor 'data').
-    //    Primeiro, garantimos que o vetor tenha espaço.
-    size_t pos_atual = data.size();
-    data.resize(pos_atual + sizeof(tamanho));
-    memcpy(&data[pos_atual], &tamanho, sizeof(tamanho));
+   // 2. Escreve os bytes da variável 'tamanho' no buffer
+   //    'memcpy' copia sizeof(short) bytes (geralmente 2)
+   //    da origem (&tamanho) para o destino (final do nosso vetor 'data').
+   //    Primeiro, garantimos que o vetor tenha espaço.
+   size_t pos_atual = data.size();
+   data.resize(pos_atual + sizeof(tamanho));
+   memcpy(&data[pos_atual], &tamanho, sizeof(tamanho));
 
-    // 3. Escreve os bytes da própria string no buffer
-    data.insert(data.end(), str.begin(), str.end());
+   // 3. Escreve os bytes da própria string no buffer
+   data.insert(data.end(), str.begin(), str.end());
 }
 string Buffer::unpackComprimento(string str)
 {
-   
 }
 int pack(int valor)
 {

@@ -13,7 +13,7 @@ public:
 
 public:
     ~RegistroAluno() = default;
-    string pack(Formato formato);
+    void pack(Buffer &buffer, Formato formato);
     void unpack(string linha, Formato formato);
     Registro lerRegistro(string linha);
     string const getChave();
