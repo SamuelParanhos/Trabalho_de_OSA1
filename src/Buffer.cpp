@@ -2,63 +2,71 @@
 #include <iostream>
 #include <sstream>
 
-void packFixo(string str, int tamanho)
+void Buffer::packFixo(string &binario, string &str, int tamanho)
 {
-
-    /*// Cria uma string para armazenar os campos nome e idade
-    // em formato binário.
-    string binario(campoRegistro, '\0');
-
-    // Coloca o nome na string em formato binário.
-    strncpy(&binario[0], nome.c_str(), campoNome);
-
-    // Coloca a idade na string em formato binário.
-    memcpy(&binario[0] + campoNome, &idade, sizeof(int));
-
-    return binario;
-     */
+   str.resize(tamanho, ' ');
+   binario += str;
 }
-string unpackFixo(string str, int tamanho)
+string Buffer::unpackFixo(string str, int tamanho)
 {
+     
+   /*// Cria uma variável auxiliar para receber o nome.
+   char nome_char[campoRegistro + 1];
 
-    /*// Cria uma variável auxiliar para receber o nome.
-char nome_char[campoRegistro + 1];
+   // O nome em formato binário é colocado na variável auxiliar
+   // e convertido para o tipo char*.
+ memcpy(nome_char, buffer, campoRegistro);
 
-// O nome em formato binário é colocado na variável auxiliar
-// e convertido para o tipo char*.
-memcpy(nome_char, buffer, campoRegistro);
+ nome_char[campoRegistro] = '\0';
 
-nome_char[campoRegistro] = '\0';
+ // O nome é convertido para string e armazenado no campo nome do Registro.
+ nome = std::string(nome_char);
 
-// O nome é convertido para string e armazenado no campo nome do Registro.
-nome = std::string(nome_char);
-
-// O nome em formato binário é colocado no campo idade de Registro.
-memcpy(&idade, buffer + campoNome, sizeof(int));
-*/
+ // O nome em formato binário é colocado no campo idade de Registro.
+ memcpy(&idade, buffer + campoNome, sizeof(int));
+ */
 }
-void packDelimitado(string str, char delimitador)
+void Buffer::packDelimitado(string &binario, string &str,char delimitador)
+{
+   binario += str + delimitador;
+}
+string Buffer::unpackDelimitado(string str,char delimitador)
 {
 }
-string unpackDelimitado(string str, char delimitador)
+void Buffer::packComprimento(string &binario, string &str)
 {
+   short tamanho = str.length();
+   binario.append(reinterpret_cast<const char*>(&tamanho), sizeof (int));
+   binario.append(str.data(),tamanho);
+
+    // 1. Pega o tamanho da string
+   
+
+    // 2. Escreve os bytes da variável 'tamanho' no buffer
+    //    'memcpy' copia sizeof(short) bytes (geralmente 2)
+    //    da origem (&tamanho) para o destino (final do nosso vetor 'data').
+    //    Primeiro, garantimos que o vetor tenha espaço.
+    size_t pos_atual = data.size();
+    data.resize(pos_atual + sizeof(tamanho));
+    memcpy(&data[pos_atual], &tamanho, sizeof(tamanho));
+
+    // 3. Escreve os bytes da própria string no buffer
+    data.insert(data.end(), str.begin(), str.end());
 }
-void packComprimento(string str)
+string Buffer::unpackComprimento(string str)
 {
-}
-string unpackComprimento(string str)
-{
+   
 }
 int pack(int valor)
 {
 }
-bool read(istream strem, int tamanho)
+bool Buffer::read(istream &strem, int tamanho)
 {
 }
-void write(ostream stream)
+void Buffer::write(ostream &stream)
 {
 }
-void clear()
+void Buffer::clear()
 {
 }
 

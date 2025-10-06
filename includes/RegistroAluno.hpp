@@ -7,14 +7,17 @@ public:
     int matricula;
     string nome;
     string curso;
+    int tamNome = 50;
+    int tamMatricula = 20;
+    int tamCurso = 20;
 
 public:
     ~RegistroAluno() = default;
-    void pack(string linha, Formato formato);
+    string pack(Formato formato);
     void unpack(string linha, Formato formato);
     Registro lerRegistro(string linha);
     string const getChave();
-    int const getTamanhoFixo();
+    int const getTamanhoFixo(string str);
 };
 
 #endif

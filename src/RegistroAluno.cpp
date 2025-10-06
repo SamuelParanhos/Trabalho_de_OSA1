@@ -19,24 +19,37 @@ Registro RegistroAluno::lerRegistro(string linha)
   registro.matricula = stoi(matricula_str);
   registro.curso = curso_str;
 }
-void RegistroAluno::pack(string linha, Formato formato)
+string RegistroAluno::pack(Formato formato)
 {
   Buffer buffer;
   int tamanho = 50;
   char delimitador = '&';
+  string binario;
+  string nome_str = nome ;
+  string matricula_str = to_string(matricula);
+  string curso_str = curso;
 
   switch (formato)
   {
+
   case 1:
-    buffer.packFixo(linha, tamanho);
+
+    buffer.packFixo(binario, nome_str, tamNome);
+    buffer.packFixo(binario, matricula_str, tamMatricula);
+    buffer.packFixo(binario, curso_str, tamCurso);
+    return binario;
     break;
 
   case 2:
-    buffer.packDelimitado(linha, delimitador);
+    buffer.packDelimitado(binario, nome_str, delimitador);
+    buffer.packDelimitado(binario, matricula_str, delimitador);
+    buffer.packDelimitado(binario, curso_str, delimitador);
     break;
 
   case 3:
-    buffer.packComprimento(linha);
+    buffer.packComprimento(binario, nome_str);
+    buffer.packComprimento(binario, matricula_str );
+    buffer.packComprimento(binario, curso_str);
     break;
   }
 }
@@ -47,17 +60,20 @@ void RegistroAluno::unpack(string linha, Formato formato)
   char delimitador = '&';
   switch (formato)
   {
-
   case 1:
     buffer.unpackFixo(linha, tamanho);
     break;
 
   case 2:
-    buffer.packDelimitado(linha, delimitador);
+    buffer.unpackDelimitado(linha, delimitador);
     break;
 
   case 3:
     buffer.unpackComprimento(linha);
     break;
   }
+}
+int const getTamanhoFixo()
+{
+  return .size();
 }

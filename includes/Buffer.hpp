@@ -12,11 +12,11 @@ public:
 
 public:
     ~Buffer() = default;
-    void packFixo(string str, int tamanho);
+    void packFixo(string &binario, string& str, int tamanho);
     string unpackFixo(string str, int tamanho);
-    void packDelimitado(string str, char delimitador);
+    void packDelimitado(string &binario, string &str,char delimitador);
     string unpackDelimitado(string str, char delimitador);
-    void packComprimento(string str);
+    void packComprimento(string &binario, string &str);
     string unpackComprimento(string str);
     int pack(int valor);
     bool read(istream &stream, int tamanho);

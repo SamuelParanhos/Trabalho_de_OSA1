@@ -16,13 +16,14 @@ public:
 public:
     Arquivo(string nome, Formato fmt)
     {
-        this.nome = nome;
-        this.formato = formato;
+        nomeDoArquivo = nome;
+        formato = fmt;
     };
 
     vector<T> lerRegistroCSV()
     {
         ifstream newFile(nomeDoArquivo);
+        string linha;
         vector<T> reg;
 
         getline(newFile, linha);
@@ -52,18 +53,20 @@ public:
         return reg;
     }
 
-    void Arquivo::adicionarRegistroFixo(const vector<Registro> &reg)
+    void adicionarRegistro(const vector<T> &reg)
     {
         filesystem::path nomeBIN = filesystem::path(nomeDoArquivo).replace_extension(".bin");
         string caminhoBinario = nomeBIN.string();
         ofstream out(nomeBIN, ios::binary);
         Buffer buffer;
+        string binario;
 
         // Pega todos os registros coloca em uma variável temporária e escreve em um
         // arquivo binário.
-        for (const Registro &registro : reg)
+        for (const T &registro : reg)
         {
-            buffer.escreverRegistroFixo(registro, out);
+            binario = registro.pack(formato);
+            out.write(binario.c_str(), binario.size());
         }
 
         // Fechamento do arquivo.
