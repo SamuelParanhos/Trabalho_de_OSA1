@@ -29,20 +29,20 @@ void RegistroAluno::pack(Buffer &buffer, Formato formato)
 
   switch (formato)
   {
-  case 1:
+  case FIXO:
 
     buffer.packFixo(nome, tamNome);
     buffer.packFixo(matricula_str, tamMatricula);
     buffer.packFixo(curso, tamCurso);
     break;
 
-  case 2:
+  case DELIMITADO:
     buffer.packDelimitado(nome, delimitador);
     buffer.packDelimitado(matricula_str, delimitador);
     buffer.packDelimitado(curso, delimitador);
     break;
 
-  case 3:
+  case  COMPRIMEMTO:  
     buffer.packComprimento(nome);
     buffer.packComprimento(matricula_str);
     buffer.packComprimento(curso);

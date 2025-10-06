@@ -1,12 +1,14 @@
 #include "Buffer.hpp"
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 void Buffer::packFixo(const string &str, int tamanho)
 {
+   data.clear();
    string temp = str;
    temp.resize(tamanho, ' ');
-   data.insert(data.end(), str.begin(), str.end());
+   data.insert(data.end(), temp.begin(), temp.end());
 }
 string Buffer::unpackFixo(string str, int tamanho)
 {
@@ -29,6 +31,7 @@ string Buffer::unpackFixo(string str, int tamanho)
 }
 void Buffer::packDelimitado(const string &str, char delimitador)
 {
+   data.clear();
    data.insert(data.end(), str.begin(), str.end());
    data.push_back(delimitador);
 }
@@ -37,21 +40,14 @@ string Buffer::unpackDelimitado(string str, char delimitador)
 }
 void Buffer::packComprimento(const string &str)
 {
-   short tamanho = str.length();
-   binario.append(reinterpret_cast<const char *>(&tamanho), sizeof(int));
-   binario.append(str.data(), tamanho);
+   data.clear();
+   short len = str.length();
+   ponteiro = data.size();
 
-   // 1. Pega o tamanho da string
+   data.resize(ponteiro + sizeof(len));
 
-   // 2. Escreve os bytes da variável 'tamanho' no buffer
-   //    'memcpy' copia sizeof(short) bytes (geralmente 2)
-   //    da origem (&tamanho) para o destino (final do nosso vetor 'data').
-   //    Primeiro, garantimos que o vetor tenha espaço.
-   size_t pos_atual = data.size();
-   data.resize(pos_atual + sizeof(tamanho));
-   memcpy(&data[pos_atual], &tamanho, sizeof(tamanho));
+   memcpy(&data[ponteiro], &len, sizeof(len));
 
-   // 3. Escreve os bytes da própria string no buffer
    data.insert(data.end(), str.begin(), str.end());
 }
 string Buffer::unpackComprimento(string str)
@@ -68,6 +64,7 @@ void Buffer::write(ostream &stream)
 }
 void Buffer::clear()
 {
+   data.clear();
 }
 
 /*Registro Buffer::lerRegistro(string linha)

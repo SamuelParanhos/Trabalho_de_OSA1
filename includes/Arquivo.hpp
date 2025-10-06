@@ -41,13 +41,9 @@ public:
         // Cria um novo arquivo e variáveis para auxiliar na exucação da função.
         ifstream newFile(nomeDoArquivo, ios::bin);
         vector<T> reg;
-
-        getline(newFile, linha);
-
-        while (getline(newFile, linha))
-        {
+        while(newFile.read()){
             T registro;
-            registro.unpacked(linha, formato);
+            registro.unpacked(formato);
             reg.push_back(registro);
         }
         return reg;
@@ -59,17 +55,15 @@ public:
         string caminhoBinario = nomeBIN.string();
         ofstream out(nomeBIN, ios::binary);
         Buffer buffer;
-        string binario;
 
-        // Pega todos os registros coloca em uma variável temporária e escreve em um
-        // arquivo binário.
         for (const T &registro : reg)
         {
-            binario = registro.pack(buffer, formato);
-            out.write(binario.c_str(), binario.size());
+            registro.pack(buffer, formato);
+            short tamanho_do_registro = buffer.data.size();
+            out.write(reinterpret_cast<const char*>(&tamanho_do_registro), sizeof(tamanho_do_registro));
+            out.write(buffer.data.data(), buffer.data.size());
         }
 
-        // Fechamento do arquivo.
         out.close();
     }
 };
