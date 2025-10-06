@@ -27,7 +27,6 @@ void RegistroAluno::pack(string linha, Formato formato)
 
   switch (formato)
   {
-
   case 1:
     buffer.packFixo(linha, tamanho);
     break;
@@ -50,7 +49,7 @@ void RegistroAluno::unpack(string linha, Formato formato)
   {
 
   case 1:
-    buffer.unpackFixo(tamanho);
+    buffer.unpackFixo(linha, tamanho);
     break;
 
   case 2:
@@ -58,7 +57,7 @@ void RegistroAluno::unpack(string linha, Formato formato)
     break;
 
   case 3:
-    buffer.unpackComprimento();
+    buffer.unpackComprimento(linha);
     break;
   }
 }
