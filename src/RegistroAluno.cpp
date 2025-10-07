@@ -21,8 +21,6 @@ Registro RegistroAluno::lerRegistro(string linha)
 }
 void RegistroAluno::pack(Buffer &buffer, Formato formato)
 {
-  int tamanho = 50;
-  char delimitador = '&';
   string binario;
   string matricula_str = to_string(matricula);
   buffer.clear();
@@ -42,30 +40,36 @@ void RegistroAluno::pack(Buffer &buffer, Formato formato)
     buffer.packDelimitado(curso, delimitador);
     break;
 
-  case  COMPRIMEMTO:  
+  case COMPRIMEMTO:
     buffer.packComprimento(nome);
     buffer.packComprimento(matricula_str);
     buffer.packComprimento(curso);
     break;
   }
 }
-void RegistroAluno::unpack(string linha, Formato formato)
+void RegistroAluno::unpack(Buffer &buffer, Formato formato)
 {
-  Buffer buffer;
-  int tamanho = 50;
-  char delimitador = '&';
   switch (formato)
   {
-  case 1:
-    buffer.unpackFixo(linha, tamanho);
+  case FIXO:
+    nome = buffer.unpackFixo(tamNome);
+    matricula = stoi(buffer.unpackFixo(tamMatricula));
+    curso = buffer.unpackFixo(tamCurso);
+    buffer.ponteiro = 0;
     break;
 
-  case 2:
-    buffer.unpackDelimitado(linha, delimitador);
+  case DELIMITADO:
+    nome = buffer.unpackDelimitado(delimitador);
+    matricula = stoi(buffer.unpackDelimitado(delimitador));
+    curso = buffer.unpackDelimitado(delimitador);
+    buffer.ponteiro = 0;
     break;
 
-  case 3:
-    buffer.unpackComprimento(linha);
+  case COMPRIMEMTO:
+    nome = buffer.unpackComprimento();
+    matricula = stoi(buffer.unpackComprimento());
+    curso = buffer.unpackComprimento();
+    buffer.ponteiro = 0;
     break;
   }
 }

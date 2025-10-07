@@ -36,14 +36,18 @@ public:
         }
         return reg;
     }
+ 
     vector<T> lerRegistros()
     {
         // Cria um novo arquivo e variáveis para auxiliar na exucação da função.
         ifstream newFile(nomeDoArquivo, ios::bin);
         vector<T> reg;
-        while(newFile.read()){
+        Buffer buffer;
+
+        while(buffer.read(newFile)){ 
             T registro;
-            registro.unpacked(formato);
+           
+            registro.unpacked(buffer, formato);
             reg.push_back(registro);
         }
         return reg;
