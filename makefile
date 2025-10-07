@@ -1,4 +1,3 @@
-# Arquivo principal 
 MAIN := main
 
 # Pastas
@@ -6,7 +5,7 @@ INCLUDES := includes
 SRC := src
 
 # Objetos a compilar
-OBJECTS := $(MAIN).o $(SRC)/Registro.o $(SRC)/Buffer.o $(SRC)/Arquivo.o
+OBJECTS := $(MAIN).o $(SRC)/Buffer.o $(SRC)/RegistroAluno.o
 
 # Flags do compilador
 FLAGS := -Wall -Wextra -std=c++17 -pedantic-errors -I$(INCLUDES)
@@ -20,7 +19,7 @@ MATH := -lm
 # Compilador
 CC := g++
 
-# ajustando alguns parâmetros/comandos ao sistema operacional
+# Ajuste para SO
 ifeq ($(OS), Windows_NT)
 OUTPUTMAIN := $(MAIN).exe
 else
@@ -36,17 +35,14 @@ $(OUTPUTMAIN): $(OBJECTS)
 	$(CC) $(FLAGS) $(OBJECTS) -o $(OUTPUTMAIN) $(MATH)
 
 # Regras de compilação dos objetos
-$(MAIN).o: $(MAIN).cpp $(INCLUDES)/Arquivo.hpp $(INCLUDES)/Registro.hpp $(INCLUDES)/Buffer.hpp
+$(MAIN).o: $(MAIN).cpp $(INCLUDES)/Arquivo.hpp $(INCLUDES)/Buffer.hpp $(INCLUDES)/Registro.hpp $(INCLUDES)/RegistroAluno.hpp
 	$(CC) $(FLAGS) -c $(MAIN).cpp -o $(MAIN).o
-
-$(SRC)/Registro.o: $(SRC)/Registro.cpp $(INCLUDES)/Registro.hpp
-	$(CC) $(FLAGS) -c $(SRC)/Registro.cpp -o $(SRC)/Registro.o
 
 $(SRC)/Buffer.o: $(SRC)/Buffer.cpp $(INCLUDES)/Buffer.hpp $(INCLUDES)/Registro.hpp $(INCLUDES)/Arquivo.hpp
 	$(CC) $(FLAGS) -c $(SRC)/Buffer.cpp -o $(SRC)/Buffer.o
 
-$(SRC)/Arquivo.o: $(SRC)/Arquivo.cpp $(INCLUDES)/Arquivo.hpp $(INCLUDES)/Registro.hpp $(INCLUDES)/Buffer.hpp
-	$(CC) $(FLAGS) -c $(SRC)/Arquivo.cpp -o $(SRC)/Arquivo.o
+$(SRC)/RegistroAluno.o: $(SRC)/RegistroAluno.cpp $(INCLUDES)/RegistroAluno.hpp $(INCLUDES)/Registro.hpp
+	$(CC) $(FLAGS) -c $(SRC)/RegistroAluno.cpp -o $(SRC)/RegistroAluno.o
 
 # Limpeza
 clean:

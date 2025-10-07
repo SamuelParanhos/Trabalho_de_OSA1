@@ -3,7 +3,7 @@
 #include "sstream"
 #include <cstring>
 
-Registro RegistroAluno::lerRegistro(string linha)
+void RegistroAluno::lerRegistro(string linha)
 {
   RegistroAluno registro;
   stringstream ss(linha);
@@ -18,8 +18,10 @@ Registro RegistroAluno::lerRegistro(string linha)
   registro.nome = nome_str;
   registro.matricula = stoi(matricula_str);
   registro.curso = curso_str;
+
+
 }
-void RegistroAluno::pack(Buffer &buffer, Formato formato)
+void RegistroAluno::pack(Buffer &buffer, Formato formato) 
 {
   string binario;
   string matricula_str = to_string(matricula);
@@ -73,6 +75,8 @@ void RegistroAluno::unpack(Buffer &buffer, Formato formato)
     break;
   }
 }
-int const getTamanhoFixo()
+/*int RegistroAluno::getTamanhoFixo() const
 {
+    return tamMatricula + tamNome + tamCurso;
 }
+*/

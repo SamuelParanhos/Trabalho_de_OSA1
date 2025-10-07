@@ -14,12 +14,12 @@ enum Formato
 class Registro
 {
 public:
-    virtual ~Registro() = default;
-    virtual void pack(Buffer &buffer, Formato formato) const;
-    virtual void unpack(Buffer &buffer, Formato formato);
-    virtual Registro lerRegistro(string linha);
-    virtual string const getChave();
-    virtual int const getTamanhoFixo(string str);
+    virtual void pack(Buffer &buffer, Formato formato) = 0;
+    virtual void unpack(Buffer &buffer, Formato formato) = 0;
+    virtual void lerRegistro(string linha) = 0;
+      virtual ~Registro() = default;
+    //virtual string getChave() const;
+    //virtual int getTamanhoFixo(string str) const;
 };
 
 #endif
