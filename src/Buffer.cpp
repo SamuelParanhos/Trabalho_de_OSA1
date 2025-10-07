@@ -65,12 +65,12 @@ string Buffer::unpackComprimento()
 {
    short tamanho_do_campo;
 
-   const char *inicioDados = &data[ponteiro];
+   //const char *inicioDados = &data[ponteiro];
 
    memcpy(&tamanho_do_campo, &data[ponteiro], sizeof(short));
    ponteiro += sizeof(short);
 
-   string campo(inicioDados, tamanho_do_campo);
+   string campo(&data[ponteiro], tamanho_do_campo);
 
    ponteiro += tamanho_do_campo;
 

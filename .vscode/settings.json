@@ -45,6 +45,7 @@
         "typeinfo": "cpp",
         "iostream": "cpp",
         "sstream": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "filesystem": "cpp"
     }
 }

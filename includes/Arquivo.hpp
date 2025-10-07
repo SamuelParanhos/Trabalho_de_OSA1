@@ -8,60 +8,33 @@
 #include <fstream>
 #include <filesystem>
 
-using namespace std;
 template <typename T>
 class Arquivo
 {
 public:
-    string nomeDoArquivo;
+    std::string nomeDoArquivoBase; 
     Formato formato;
 
 public:
-    Arquivo(string nome, Formato fmt)
+    Arquivo(std::string nome, Formato fmt)
     {
-        nomeDoArquivo = nome;
+        nomeDoArquivoBase = nome;
         formato = fmt;
     };
 
-    /*vector<T> lerRegistroCSV()
+    std::vector<T> lerRegistroCSV()
     {
-        vector<T> regs;
-        ifstream csvFile(nomeDoArquivo);
-
-        if (!csvFile.is_open()) {
-            cerr << "ERRO: Nao foi possivel abrir o arquivo CSV: " << nomeDoArquivo << endl;
-            return regs; // Retorna o vetor vazio se o arquivo não abrir
-        }
-
-        string linha;
-        // Pula a primeira linha (cabeçalho) do arquivo CSV
-        getline(csvFile, linha);
-
-        while (getline(csvFile, linha))
-        {
-            if (linha.empty()) continue; // Ignora linhas vazias
-
-            T registro;
-            // Para esta linha funcionar, sua classe T (ex: RegistroAluno)
-            // deve ter um método público: void lerRegistro(const string& linha);
-            registro.lerRegistro(linha);
-            regs.push_back(registro);
-        }
-        return regs;
-    }*/
-    vector<T> lerRegistroCSV()
-    {
-        ifstream newFile(nomeDoArquivo);
-        string linha;
-        vector<T> reg;
+        std::ifstream newFile(nomeDoArquivoBase);
+        std::string linha;
+        std::vector<T> reg;
 
         if (!newFile.is_open())
         {
-            cerr << "ERRO: Nao foi possivel abrir o arquivo CSV: " << nomeDoArquivo << endl;
-            return reg; // Retorna o vetor vazio se o arquivo não abrir
+            std::cerr << "ERRO: Nao foi possivel abrir o arquivo CSV: " << nomeDoArquivoBase << std::endl;
+            return reg;
         }
 
-        getline(newFile, linha);
+        getline(newFile, linha); // Pula cabeçalho
 
         while (getline(newFile, linha))
         {
@@ -74,21 +47,25 @@ public:
         return reg;
     }
 
-    vector<T> lerRegistros()
+    std::vector<T> lerRegistros()
     {
-        // Cria um novo arquivo e variáveis para auxiliar na exucação da função.
-        ifstream newFile(nomeDoArquivo, ios::binary);
-        vector<T> reg;
+  
+        std::filesystem::path nomeBIN = std::filesystem::path(nomeDoArquivoBase).replace_extension(".bin");
+        
+        std::ifstream newFile(nomeBIN, std::ios::binary);
+        std::vector<T> reg;
         short tamanhoDoRegistro;
 
-        // Lê o tamanho do proximo registro, se não tiver sai do loop
+        if (!newFile.is_open()) {
+            std::cerr << "ERRO: Nao foi possivel abrir o arquivo binario para leitura: " << nomeBIN << std::endl;
+            return reg; 
+        }
+
         while (newFile.read(reinterpret_cast<char *>(&tamanhoDoRegistro), sizeof(tamanhoDoRegistro)))
         {
-
             Buffer buffer;
             buffer.data.resize(tamanhoDoRegistro);
 
-            // Vai ler a quantidade de bytes que acabamos de descobrir
             if (newFile.read(buffer.data.data(), tamanhoDoRegistro))
             {
                 T registro;
@@ -99,12 +76,16 @@ public:
         return reg;
     }
 
-    void adicionarRegistro(vector<T> &reg)
+    void adicionarRegistro(std::vector<T> &reg)
     {
-        filesystem::path nomeBIN = filesystem::path(nomeDoArquivo).replace_extension(".bin");
-        string caminhoBinario = nomeBIN.string();
-        ofstream out(nomeBIN, ios::binary);
+        std::filesystem::path nomeBIN = std::filesystem::path(nomeDoArquivoBase).replace_extension(".bin");
+        std::ofstream out(nomeBIN, std::ios::binary);
         Buffer buffer;
+
+        if (!out.is_open()) {
+            std::cerr << "ERRO: Nao foi possivel criar o arquivo binario para escrita: " << nomeBIN << std::endl;
+            return;
+        }
 
         for (T &registro : reg)
         {
