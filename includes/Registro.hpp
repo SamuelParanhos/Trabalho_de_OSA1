@@ -6,20 +6,20 @@
 using namespace std;
 enum Formato
 {
-    FIXO,
-    DELIMITADO,
-    COMPRIMEMTO
+  FIXO,
+  DELIMITADO,
+  COMPRIMENTO
 };
 
 class Registro
 {
 public:
-    virtual void pack(Buffer &buffer, Formato formato) = 0;
-    virtual void unpack(Buffer &buffer, Formato formato) = 0;
-    virtual void lerRegistro(string linha) = 0;
-      virtual ~Registro() = default;
-    //virtual string getChave() const;
-    //virtual int getTamanhoFixo(string str) const;
+  virtual void pack(Buffer &buffer, Formato formato) = 0;
+  virtual void unpack(Buffer &buffer, Formato formato) = 0;
+  virtual void lerRegistro(string linha) = 0;
+  virtual ~Registro() = default;
+  // virtual string getChave() const;
+  // virtual int getTamanhoFixo(string str) const;
 };
 
 #endif

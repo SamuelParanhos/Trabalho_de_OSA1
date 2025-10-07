@@ -5,7 +5,6 @@
 
 void Buffer::packFixo(const string &str, int tamanho)
 {
-   data.clear();
    string temp = str;
    temp.resize(tamanho, ' ');
    data.insert(data.end(), temp.begin(), temp.end());
@@ -28,7 +27,6 @@ string Buffer::unpackFixo(int tamanho)
 }
 void Buffer::packDelimitado(const string &str, char delimitador)
 {
-   data.clear();
    data.insert(data.end(), str.begin(), str.end());
    data.push_back(delimitador);
 }
@@ -54,7 +52,6 @@ string Buffer::unpackDelimitado(char delimitador)
 }
 void Buffer::packComprimento(const string &str)
 {
-   data.clear();
    short len = str.length();
    int pos = data.size();
 
