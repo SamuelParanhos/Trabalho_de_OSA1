@@ -16,8 +16,11 @@ void RegistroAluno::lerRegistro(string linha)
 
   // atribui o nome a seu respectivo campo no registro.
   registro.nome = nome_str;
-  registro.matricula = stoi(matricula_str);
   registro.curso = curso_str;
+
+  if(!matricula_str.empty()){
+    registro.matricula = stoi(matricula_str);
+  }
 
 
 }
