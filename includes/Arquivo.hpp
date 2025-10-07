@@ -36,19 +36,28 @@ public:
         }
         return reg;
     }
- 
+
     vector<T> lerRegistros()
     {
         // Cria um novo arquivo e variáveis para auxiliar na exucação da função.
         ifstream newFile(nomeDoArquivo, ios::bin);
         vector<T> reg;
-        Buffer buffer;
+        short tamanhoDoRegistro
 
-        while(buffer.read(newFile)){ 
-            T registro;
-           
-            registro.unpacked(buffer, formato);
-            reg.push_back(registro);
+           //Lê o tamanho do proximo registro, se não tiver sai do loop
+            while (inputFile.read(reinterpret_cast<char *>(&tamanho_do_registro), sizeof(tamanho_do_registro)))
+        {
+
+            Buffer buffer;
+            buffer.data.resize(tamanhoDoRegistro);
+
+            // Vai ler a quantidade de bytes que acabamos de descobrir
+            if (inputFile.read(buffer.data.data(), tamanhoDoRegistro))
+            {
+                T registro;
+                registro.unpacked(buffer, formato); 
+                reg.push_back(registro);
+            }
         }
         return reg;
     }
@@ -64,7 +73,7 @@ public:
         {
             registro.pack(buffer, formato);
             short tamanho_do_registro = buffer.data.size();
-            out.write(reinterpret_cast<const char*>(&tamanho_do_registro), sizeof(tamanho_do_registro));
+            out.write(reinterpret_cast<const char *>(&tamanho_do_registro), sizeof(tamanho_do_registro));
             out.write(buffer.data.data(), buffer.data.size());
         }
 

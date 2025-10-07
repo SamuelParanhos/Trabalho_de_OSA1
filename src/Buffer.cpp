@@ -23,12 +23,8 @@ string Buffer::unpackFixo(int tamanho)
    ponteiro += tamanho;
 
    limpaCampo(campo);
-   
-   if(!data[ponteiro + 1])
-   ponteiro = 0;
 
    return campo;
-
 }
 void Buffer::packDelimitado(const string &str, char delimitador)
 {
@@ -38,6 +34,22 @@ void Buffer::packDelimitado(const string &str, char delimitador)
 }
 string Buffer::unpackDelimitado(char delimitador)
 {
+   {
+      string campo;
+
+      while (ponteiro < data.size() && data[ponteiro] != delimitador)
+      {
+         campo.push_back(data[ponteiro]);
+         ponteiro++;
+      }
+
+      if (ponteiro < data.size() && data[ponteiro] == delimitador)
+      {
+         ponteiro++; 
+      }
+
+      return campo;
+   }
 }
 void Buffer::packComprimento(const string &str)
 {
@@ -53,13 +65,25 @@ void Buffer::packComprimento(const string &str)
 }
 string Buffer::unpackComprimento()
 {
+    short tamanho_do_campo;
+
+    const char *inicioDados = &data[ponteiro];
+
+    std::memcpy(&tamanho_do_campo, &data[ponteiro], sizeof(short));
+    ponteiro += sizeof(short); 
+    
+    string campo(inicioDados, tamanho_do_campo); 
+
+    ponteiro += tamanho_do_campo;
+
+    return campo;
+
 }
 int pack(int valor)
 {
 }
 bool Buffer::read(istream &stream)
 {
-   
 }
 void Buffer::write(ostream &stream)
 {

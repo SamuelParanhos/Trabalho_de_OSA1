@@ -55,7 +55,7 @@ void RegistroAluno::unpack(Buffer &buffer, Formato formato)
     nome = buffer.unpackFixo(tamNome);
     matricula = stoi(buffer.unpackFixo(tamMatricula));
     curso = buffer.unpackFixo(tamCurso);
-    buffer.ponteiro = 0;
+    buffer.ponteiro = 0; // Reniciei aqui porque não conseguir pensar em uma maneria melhor
     break;
 
   case DELIMITADO:
