@@ -8,91 +8,107 @@
 #include <fstream>
 #include <filesystem>
 
+//Criamos uma classe template
 template <typename T>
 class Arquivo
 {
 public:
-    std::string nomeDoArquivoBase; 
+    string nomeDoArquivoBase; 
     Formato formato;
 
 public:
-    Arquivo(std::string nome, Formato fmt)
+    Arquivo(string nome, Formato fmt)
     {
         nomeDoArquivoBase = nome;
         formato = fmt;
     };
 
-    std::vector<T> lerRegistroCSV()
+    vector<T> lerRegistroCSV()
     {
-        std::ifstream newFile(nomeDoArquivoBase);
-        std::string linha;
-        std::vector<T> reg;
-
+        //Criamos esta função para ler primeiramente de um CSV
+        ifstream newFile(nomeDoArquivoBase);
+        string linha;
+        vector<T> reg;
+        
+        //Verificamos se o arquivo foi aberto corretamente
         if (!newFile.is_open())
         {
-            std::cerr << "ERRO: Nao foi possivel abrir o arquivo CSV: " << nomeDoArquivoBase << std::endl;
+            cerr << "ERRO: Nao foi possivel abrir o arquivo CSV: " << nomeDoArquivoBase << std::endl;
             return reg;
         }
 
-        getline(newFile, linha); // Pula cabeçalho
+        //Pulamos o cabeçalho do arquivo
+        getline(newFile, linha); 
 
+        //Comando de repetição usado para ler todas as linhas do CSV
         while (getline(newFile, linha))
-        {
+        {   
+            //Verificamos se a linha esta vazia
             if (linha.empty())
                 continue;
+            //Criamos um registro e chamados a função lerRegistro, responsável por pegar cada linha,
+            //separar os campos do arquivo e colocá-los nos atributos de registro
             T registro;
             registro.lerRegistro(linha);
+            
+            //Adicionamos o registro em um vector de Registros
             reg.push_back(registro);
         }
+        newFile.close();
         return reg;
     }
 
-    std::vector<T> lerRegistros()
+    vector<T> lerRegistros()
     {
-  
-        std::filesystem::path nomeBIN = std::filesystem::path(nomeDoArquivoBase).replace_extension(".bin");
-        
-        std::ifstream newFile(nomeBIN, std::ios::binary);
-        std::vector<T> reg;
-        short tamanhoDoRegistro;
+        //Abirmos o arquivo em formato binário
+        filesystem::path nomeBIN = filesystem::path(nomeDoArquivoBase).replace_extension(".bin");
+        ifstream newFile(nomeBIN, std::ios::binary);
+        vector<T> reg;
 
+        //Verificamos se o arquivo foi aberto corretamente
         if (!newFile.is_open()) {
-            std::cerr << "ERRO: Nao foi possivel abrir o arquivo binario para leitura: " << nomeBIN << std::endl;
+            cerr << "ERRO: Nao foi possivel abrir o arquivo binario para leitura: " << nomeBIN << std::endl;
             return reg; 
         }
 
-        while (newFile.read(reinterpret_cast<char *>(&tamanhoDoRegistro), sizeof(tamanhoDoRegistro)))
+        //Criamos um buffer e usamos uma função de leitura para ler todos os registros do arquivo
+        Buffer buffer;
+        while (buffer.read(newFile))
         {
-            Buffer buffer;
-            buffer.data.resize(tamanhoDoRegistro);
+            T registro;
+            
+            //Usamos uma função para desserealizar o registro
+            registro.unpack(buffer, formato);
 
-            if (newFile.read(buffer.data.data(), tamanhoDoRegistro))
-            {
-                T registro;
-                registro.unpack(buffer, formato);
-                reg.push_back(registro);
-            }
+            //Ao final da desserealização salvamos o arquivo em um vector de registros
+            reg.push_back(registro);
         }
+        newFile.close();
         return reg;
     }
 
     void adicionarRegistro(std::vector<T> &reg)
     {
-        std::filesystem::path nomeBIN = std::filesystem::path(nomeDoArquivoBase).replace_extension(".bin");
-        std::ofstream out(nomeBIN, std::ios::binary);
+        //Abrimos o arquivo em formato binário;
+        filesystem::path nomeBIN = filesystem::path(nomeDoArquivoBase).replace_extension(".bin");
+        ofstream out(nomeBIN, ios::binary);
         Buffer buffer;
 
+        //Verificamos se o arquivo foi aberto corretamente 
         if (!out.is_open()) {
-            std::cerr << "ERRO: Nao foi possivel criar o arquivo binario para escrita: " << nomeBIN << std::endl;
+            cerr << "ERRO: Nao foi possivel criar o arquivo binario para escrita: " << nomeBIN << std::endl;
             return;
         }
 
+        //Fazemos um for aprimador para pegar com um dos registros do vector para
+        //adicioná-los no arquivo no binário
         for (T &registro : reg)
         {
+            //Função de serealizar
             registro.pack(buffer, formato);
-            short tamanho_do_registro = buffer.data.size();
-            out.write(reinterpret_cast<const char *>(&tamanho_do_registro), sizeof(tamanho_do_registro));
-            out.write(buffer.data.data(), buffer.data.size());
+
+            //Escrever os dados do registro(serealizados) no arquivo binário;
+            buffer.write(out);
         }
 
         out.close();

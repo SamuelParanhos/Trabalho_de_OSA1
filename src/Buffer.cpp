@@ -65,7 +65,6 @@ string Buffer::unpackComprimento()
 {
    short tamanho_do_campo;
 
-   //const char *inicioDados = &data[ponteiro];
 
    memcpy(&tamanho_do_campo, &data[ponteiro], sizeof(short));
    ponteiro += sizeof(short);
@@ -81,14 +80,36 @@ int pack(int valor)
    valor = 1;
    return valor;
 }
-/*bool Buffer::read(istream &stream)
+bool Buffer::read(std::istream &stream)
 {
-   return false;
+    short tamanho;
+
+    // Tenta ler o tamanho do próximo registro. Se não conseguir (fim do arquivo), retorna false.
+    if (!stream.read(reinterpret_cast<char *>(&tamanho), sizeof(tamanho)))
+    {
+        return false;
+    }
+
+    // Prepara o buffer para receber os dados
+    data.resize(tamanho);
+
+    // Lê os dados do registro para dentro do buffer. Se falhar, retorna false.
+    if (!stream.read(data.data(), tamanho))
+    {
+        return false;
+    }
+
+    return true;
 }
-void Buffer::write(ostream &stream)
+void Buffer::write(std::ostream &stream)
 {
+    // Primeiro, escreve o tamanho do registro (o "cabeçalho")
+    short tamanho = data.size();
+    stream.write(reinterpret_cast<const char *>(&tamanho), sizeof(tamanho));
+
+    // Depois, escreve os dados do buffer
+    stream.write(data.data(), tamanho);
 }
-*/
 void Buffer::clear()
 {
    data.clear();

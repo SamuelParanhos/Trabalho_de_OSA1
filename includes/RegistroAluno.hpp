@@ -8,8 +8,8 @@ public:
     string nome;
     string curso;
     int tamNome = 50;
-    int tamMatricula = 20;
-    int tamCurso = 20;
+    int tamMatricula = 8;
+    int tamCurso = 5;
     char delimitador = '&';
 
 public:
@@ -17,8 +17,6 @@ public:
     void unpack(Buffer &buffer, Formato formato);
     void lerRegistro(string linha);
     ~RegistroAluno() = default;
-    //string getChave() const;
-    //int getTamanhoFixo(string str) const;
 };
 
 #endif

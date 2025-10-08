@@ -18,8 +18,6 @@ public:
   virtual void unpack(Buffer &buffer, Formato formato) = 0;
   virtual void lerRegistro(string linha) = 0;
   virtual ~Registro() = default;
-  // virtual string getChave() const;
-  // virtual int getTamanhoFixo(string str) const;
 };
 
 #endif

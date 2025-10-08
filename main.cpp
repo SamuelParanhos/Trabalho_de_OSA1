@@ -1,72 +1,164 @@
 #include "includes/Registro.hpp"
 #include "includes/Arquivo.hpp"
 #include "includes/RegistroAluno.hpp"
-#include <iostream>
-#include <filesystem>
-#include <iostream>
-#include <fstream>
-#include <vector>
 
-// Função para testar um ciclo completo de escrita e leitura
-void testarCicloCompleto(Formato formato, const string &nomeArquivo, vector<RegistroAluno> &dadosOriginais)
-{
-    cout << "--- INICIANDO TESTE PARA O ARQUIVO: " << nomeArquivo << " ---\n";
+using namespace std;
 
-    // --- ETAPA DE ESCRITA ---
-    cout << "1. Escrevendo " << dadosOriginais.size() << " registros...\n";
-    Arquivo<RegistroAluno> arquivoEscrita(nomeArquivo, formato);
-    arquivoEscrita.adicionarRegistro(dadosOriginais);
-    cout << "   Escrita concluida.\n";
-
-    // --- ETAPA DE LEITURA ---
-    cout << "2. Lendo registros de volta para verificacao...\n";
-    Arquivo<RegistroAluno> arquivoLeitura(nomeArquivo, formato);
-    vector<RegistroAluno> dadosLidos = arquivoLeitura.lerRegistros();
-
-    if (dadosLidos.size() != dadosOriginais.size())
-    {
-        cout << "   ERRO: O numero de registros lidos (" << dadosLidos.size() << ") e diferente do original (" << dadosOriginais.size() << ")!\n";
-    }
-    else
-    {
-        cout << "   Sucesso! " << dadosLidos.size() << " registros lidos corretamente.\n";
-    }
-
-    // Imprime os registros lidos para inspeção visual
-    for (const auto &aluno : dadosLidos)
-    {
-        cout << "     -> Lido: Mat: " << aluno.matricula << ", Nome: '" << aluno.nome << "', Curso: '" << aluno.curso << "'\n";
-    }
-    cout << "--- FIM DO TESTE: " << nomeArquivo << " ---\n\n";
-}
+void ExecutarTeste(Formato formato, const string &nomeArquivo, vector<RegistroAluno> &dadosOriginais);
+void executarTodosTestes(const string &arquivoCSV, vector<RegistroAluno> &alunos);
 
 int main()
 {
-    // 1. Define o caminho para o seu arquivo CSV de teste.
-    //    Assumindo que o executável está na pasta raiz e o CSV em "data/dados.csv"
-    const string caminhoCSV = "data/dados.csv";
-    cout << "Lendo dados do arquivo '" << caminhoCSV << "'...\n";
-
-    // 2. Lê os dados originais do CSV para a memória
-    Arquivo<RegistroAluno> leitorCSV(caminhoCSV, FIXO); // O formato aqui não importa para a leitura do CSV
-    vector<RegistroAluno> alunos = leitorCSV.lerRegistroCSV();
-
-    // Verificação para garantir que o CSV foi lido com sucesso
-    if (alunos.empty())
+    filesystem::path caminho_diretorio = "data";
+    string arquivoCSV;
+    vector<RegistroAluno> alunos;
+    int menu_formato;
+    
+    //Verifica se o diretorio existe
+    if (!filesystem::exists(caminho_diretorio))
     {
-        cout << "ERRO: Nenhum registro foi lido do CSV. Verifique o caminho do arquivo ou o seu conteudo.\n";
-        return 1; // Termina o programa se não houver dados
+        cerr << "O diretorio '" << caminho_diretorio.string() << "' nao existe.\n";
+        return 1;
     }
 
-    cout << alunos.size() << " registros carregados da fonte original.\n\n";
+    for (const auto &entrada : filesystem::directory_iterator(caminho_diretorio))
+    {
+        if (filesystem::is_regular_file(entrada) && entrada.path().extension() == ".csv")
+        {
+            arquivoCSV = entrada.path().string();
+            break; 
+        }
+    }
 
-    // 3. Executa o teste completo para cada formato, usando os dados lidos do seu arquivo.
-    testarCicloCompleto(FIXO, "dados_fixo.dat", alunos);
-    testarCicloCompleto(DELIMITADO, "dados_delimitado.dat", alunos);
-    // CORREÇÃO: Corrigido o erro de digitação de COMPRIMEMTO para COMPRIMENTO
-    testarCicloCompleto(COMPRIMENTO, "dados_comprimento.dat", alunos);
+    //Verifica se tem algum arquico CSV nele
+    if (arquivoCSV.empty())
+    {
+        cerr << "Nenhum arquivo .csv encontrado em '" << caminho_diretorio.string() << "'.\n";
+        return 1;
+    }
 
-    cout << "Todos os testes foram finalizados.\n";
+    //Salva o nome do arquivo
+    string nomeArquivoCSV = filesystem::path(arquivoCSV).filename().string();
+    //Salva o nome do arquivo sem sua exetenção
+    //Ex: "dados.csv" salva como "dados"
+    string nomeBase = filesystem::path(arquivoCSV).stem().string();
+    
+    Arquivo<RegistroAluno> leitorCSV(arquivoCSV, FIXO);
+    //Faz a leitura dos registros
+    alunos = leitorCSV.lerRegistroCSV();
+
+    //Verifica se o arquivo esta vazio
+    if (alunos.empty())
+    {
+        cerr << "O arquivo '" << nomeArquivoCSV << "' esta vazio ou corrompido.\n";
+        return 1;
+    }
+
+    cout << "Arquivo CSV carregado: " << nomeArquivoCSV << " (" << alunos.size() << " registros).\n";
+
+    // Menu de Seleção 
+    while (true)
+    {
+        cout << "\n----------------------------------------\n";
+        cout << "Escolha o Formato de Serializacao para '" << nomeArquivoCSV << "':\n";
+        cout << "0 Fixo\n";
+        cout << "1 Delimitado\n";
+        cout << "2 Comprimento\n";
+        cout << "3 Todos os Formatos\n"; 
+        cout << "-1 Sair\n";
+        cout << "Opcao: ";
+
+        if (!(cin >> menu_formato))
+        {
+            cerr << "Entrada invalida. Saindo." << endl;
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            break;
+        }
+
+        if (menu_formato == -1)
+        {
+            cout << "Programa finalizado.\n";
+            break; 
+        }
+
+        if (menu_formato < 0 || menu_formato > 3) 
+        {
+            cout << "Opcao de formato invalida." << endl;
+            continue;
+        }
+        
+        if (menu_formato == 3)
+        {
+            //Executa todos os formatos de uma vez
+            executarTodosTestes(arquivoCSV, alunos);
+        }
+        else
+        {
+            Formato formatoSelecionado;
+            string formatoStr;
+            //Salva o formato do arquivo
+            if (menu_formato == 0)      { formatoSelecionado = FIXO;      formatoStr = "fixo"; }
+            else if (menu_formato == 1) { formatoSelecionado = DELIMITADO; formatoStr = "delimitado"; }
+            else if (menu_formato == 2) { formatoSelecionado = COMPRIMENTO; formatoStr = "comprimento"; }
+            string nomeArquivoBinario = nomeBase + "_" + formatoStr + ".bin";
+            //Executa o arquivo no formato selecionado
+            ExecutarTeste(formatoSelecionado, nomeArquivoBinario, alunos);
+        }
+    }
 
     return 0;
+}
+
+void ExecutarTeste(Formato formato, const string &nomeArquivo, vector<RegistroAluno> &dadosOriginais)
+{
+    string formatoStr;
+    if (formato == FIXO)
+        formatoStr = "Fixo";
+    else if (formato == DELIMITADO)
+        formatoStr = "Delimitado";
+    else if (formato == COMPRIMENTO)
+        formatoStr = "Ccomprimento";
+
+    cout << "--- Iniciando Execução " << formatoStr << " (Arquivo: " << nomeArquivo << ") ---\n";
+
+    //Serialização
+    Arquivo<RegistroAluno> arquivoEscrita(nomeArquivo, formato);
+    arquivoEscrita.adicionarRegistro(dadosOriginais);
+    cout << " Serializacao para '" << nomeArquivo << "' concluida.\n";
+
+    //Desearilização
+    Arquivo<RegistroAluno> arquivoLeitura(nomeArquivo, formato);
+    vector<RegistroAluno> dadosLidos = arquivoLeitura.lerRegistros();
+
+    //Verificação
+    if (dadosLidos.size() != dadosOriginais.size())
+    {
+        cout << "Erro - Numero de registros lidos (" << dadosLidos.size() << ") difere do original (" << dadosOriginais.size() << ")!\n";
+    }
+    else
+    {
+        cout << dadosLidos.size() << " registros desserializados.\n";
+    }
+
+    // Mostra alguns registros lidos
+    cout << "Amostra de alguns Dados lidos:" << endl;
+    for (size_t i = 0; i < dadosLidos.size() && i < 5; ++i)
+    {
+        const auto &aluno = dadosLidos[i];
+        cout << " Mat: " << aluno.matricula << ", Nome: '" << aluno.nome << "', Curso: '" << aluno.curso << "'\n";
+    }
+}
+
+void executarTodosTestes(const string &arquivoCSV, vector<RegistroAluno> &alunos)
+{
+    string nomeBase = filesystem::path(arquivoCSV).stem().string();
+
+    cout << "Processando Todos os Formatos para: " << filesystem::path(arquivoCSV).filename().string() << endl;
+
+    ExecutarTeste(FIXO, nomeBase + "_fixo.bin", alunos);
+    cout<<'\n';
+    ExecutarTeste(DELIMITADO, nomeBase + "_delimitado.bin", alunos);
+    cout<<'\n';
+    ExecutarTeste(COMPRIMENTO, nomeBase + "_comprimento.bin", alunos);
 }
