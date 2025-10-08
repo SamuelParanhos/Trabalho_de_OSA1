@@ -1,7 +1,7 @@
 #ifndef BUFFER_HPP
 #define BUFFER_HPP
 #include <vector>
-#include <string>  
+#include <string>
 
 using namespace std;
 
@@ -19,7 +19,6 @@ public:
     string unpackDelimitado(char delimitador);
     void packComprimento(const string &str);
     string unpackComprimento();
-    int pack(int valor);
     bool read(istream &stream);
     void write(ostream &stream);
     void clear();
