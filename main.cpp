@@ -118,7 +118,7 @@ void ExecutarTeste(Formato formato, const string &nomeArquivo, vector<RegistroAl
     else if (formato == DELIMITADO)
         formatoStr = "Delimitado";
     else if (formato == COMPRIMENTO)
-        formatoStr = "Ccomprimento";
+        formatoStr = "Comprimento";
 
     cout << "--- Iniciando Execução " << formatoStr << " (Arquivo: " << nomeArquivo << ") ---\n";
 
